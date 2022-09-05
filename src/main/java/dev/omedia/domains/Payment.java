@@ -4,7 +4,10 @@ package dev.omedia.domains;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 
 @Getter
@@ -18,18 +21,23 @@ import java.time.LocalDate;
 public class Payment {
 
     @Id
-    @Column(name = "payment_id")
+    @Column(name = "payment_id",columnDefinition = "serial")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "payment_id_seq")
     @SequenceGenerator(name = "payment_id_gen",sequenceName = "payment_id_seq",allocationSize = 1)
     private long id;
 
+    @NotNull
     @PastOrPresent
     @Column(name = "payment_date",nullable = false)
     private LocalDate paymentDate;
 
+    @NotNull
+    @PositiveOrZero
+    @Digits(integer = 10,fraction = 2)
     @Column(name = "amount_money_paid",nullable = false,precision = 10,scale = 2)
     private double AmountMoneyPaid;
 
-    @Column(name = "item_id",nullable = false)
-    private long itemId;
+
+    @ManyToOne
+    private Item item;
 }
