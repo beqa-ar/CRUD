@@ -60,4 +60,18 @@ public abstract class Item {
     @OneToOne
     @JoinColumn(name ="branch_id")
     private Branch branch;
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", ownerPersonalNo='" + ownerPersonalNo + '\'' +
+                ", loanStartDate=" + loanStartDate +
+                ", AmountMoneyPaid=" + AmountMoneyPaid +
+                ", monthlyPayment=" + monthlyPayment +
+                ", status=" + status +
+                ", statusUpdateDate=" + statusUpdateDate +
+                ", branch=" + branch +
+                '}';
+    }
 }

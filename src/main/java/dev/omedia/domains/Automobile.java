@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 import java.time.Year;
 
 @Getter
@@ -29,9 +30,9 @@ public class Automobile extends Item {
     private String model;
 
     @NotNull
-    @PastOrPresent
+    @Digits(integer = 4,fraction = 0)
     @Column(name = "manufacture_year", nullable = false)
-    private Year manufactureYear;
+    private int manufactureYear;
 
     @NotNull
     @Max(value = 999_999)
@@ -42,4 +43,15 @@ public class Automobile extends Item {
     @Column(name ="odometer_unit")
     @Enumerated(value = EnumType.STRING)
     private OdometerUnit odometerUnit;
+
+    @Override
+    public String toString() {
+        return "Automobile{" +
+                "manufacturer='" + manufacturer + '\'' +
+                ", model='" + model + '\'' +
+                ", manufactureYear=" + manufactureYear +
+                ", odometer=" + odometer +
+                ", odometerUnit=" + odometerUnit +
+                '}';
+    }
 }
