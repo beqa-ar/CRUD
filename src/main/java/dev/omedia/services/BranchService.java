@@ -1,10 +1,12 @@
 package dev.omedia.services;
 
+import dev.omedia.domains.Automobile;
 import dev.omedia.domains.Branch;
-import dev.omedia.enums.LoanStatus;
+import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.BranchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +19,8 @@ public class BranchService {
         this.repo = repo;
     }
 
-    public Iterable<Branch> getJewelries() {
-        return repo.findAll();
+    public Iterable<Branch> getBranches(final Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     public Branch getBranch(final long id) {
@@ -27,6 +29,9 @@ public class BranchService {
     }
 
     public Branch addBranch(final Branch branch) {
+        if(repo.existsById(branch.getId())){
+            throw new EntityAlreadyExistsException(Branch.class.getName() + "with id: " + branch.getId() + " already exists");
+        }
         return repo.save(branch);
     }
 

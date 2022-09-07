@@ -1,9 +1,12 @@
 package dev.omedia.services;
 
+import dev.omedia.domains.Automobile;
 import dev.omedia.domains.Material;
+import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.MaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,8 +19,8 @@ public class MaterialService {
         this.repo = repo;
     }
 
-    public Iterable<Material> getMaterials() {
-        return repo.findAll();
+    public Iterable<Material> getMaterials(final Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     public Material getMaterial(final long id) {
@@ -26,6 +29,9 @@ public class MaterialService {
     }
 
     public Material addMaterial(final Material material) {
+        if(repo.existsById(material.getId())){
+            throw new EntityAlreadyExistsException(Material.class.getName() + "with id: " + material.getId() + " already exists");
+        }
         return repo.save(material);
     }
 

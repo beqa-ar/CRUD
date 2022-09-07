@@ -25,8 +25,7 @@ public abstract class Item {
 
 
     @NotNull
-    @Size(min = 11,max = 11)
-    @Digits(integer = 11,fraction = 0)
+    @Pattern(regexp="\\d{11}",message="only numbers! length must be 11")
     @Column(name = "owner_personal_no",nullable = false,length = 11)
     private String ownerPersonalNo;
 
@@ -61,17 +60,4 @@ public abstract class Item {
     @JoinColumn(name ="branch_id")
     private Branch branch;
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", ownerPersonalNo='" + ownerPersonalNo + '\'' +
-                ", loanStartDate=" + loanStartDate +
-                ", AmountMoneyPaid=" + AmountMoneyPaid +
-                ", monthlyPayment=" + monthlyPayment +
-                ", status=" + status +
-                ", statusUpdateDate=" + statusUpdateDate +
-                ", branch=" + branch +
-                '}';
-    }
 }

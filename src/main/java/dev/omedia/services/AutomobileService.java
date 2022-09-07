@@ -1,13 +1,14 @@
 package dev.omedia.services;
 
 import dev.omedia.domains.Automobile;
-import dev.omedia.domains.Item;
 import dev.omedia.enums.LoanStatus;
 import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.AutomobileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AutomobileService {
@@ -19,20 +20,23 @@ public class AutomobileService {
         this.repo = repo;
     }
 
-    public Iterable<Automobile> getAutomobiles() {
-        return repo.findAll();
+    public Iterable<Automobile> getAutomobiles(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     public Automobile getAutomobile(final long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(Automobile.class.getName()+"with id: "+id+" not found" ));
+                .orElseThrow(() -> new EntityNotFoundException(Automobile.class.getName() + "with id: " + id + " not found"));
     }
 
     public Automobile addAutomobile(final Automobile automobile) {
-            return repo.save(automobile);
+        if(repo.existsById(automobile.getId())){
+            throw new EntityAlreadyExistsException(Automobile.class.getName() + "with id: " + automobile.getId() + " already exists");
+        }
+        return repo.save(automobile);
     }
 
-    public Automobile updateAutomobile(final long id,final Automobile automobile) {
+    public Automobile updateAutomobile(final long id, final Automobile automobile) {
         if (repo.existsById(id)) {
             automobile.setId(id);
             return repo.save(automobile);
@@ -40,14 +44,17 @@ public class AutomobileService {
             throw new EntityNotFoundException(Automobile.class.getName() + "with id: " + id + " not found");
         }
     }
+
     public void removeAutomobileById(final long id) {
         repo.deleteById(id);
     }
-    public Iterable<Automobile> getItemByOwnerPersonalNo(final String ownerPersonalNo){
-        return repo.findByOwnerPersonalNo(ownerPersonalNo);
+
+    public Iterable<Automobile> getAutomobilesByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
+        return repo.findByOwnerPersonalNo(ownerPersonalNo, pageable);
     }
-    public Iterable<Automobile> getItemByStatus(final LoanStatus status){
-        return repo.findByStatus(status);
+
+    public Iterable<Automobile> getAutomobilesByStatus(final LoanStatus status, final Pageable pageable) {
+        return repo.findByStatus(status, pageable);
     }
 
 }

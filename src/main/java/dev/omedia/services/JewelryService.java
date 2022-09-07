@@ -1,10 +1,13 @@
 package dev.omedia.services;
 
+import dev.omedia.domains.Automobile;
 import dev.omedia.domains.Jewelry;
 import dev.omedia.enums.LoanStatus;
+import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.JewelryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,8 +20,8 @@ public class JewelryService {
         this.repo = repo;
     }
 
-    public Iterable<Jewelry> getJewelries() {
-        return repo.findAll();
+    public Iterable<Jewelry> getJewelries(final Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     public Jewelry getJewelry(final long id) {
@@ -27,6 +30,10 @@ public class JewelryService {
     }
 
     public Jewelry addJewelry(final Jewelry jewelry) {
+
+        if(repo.existsById(jewelry.getId())){
+            throw new EntityAlreadyExistsException(Jewelry.class.getName() + "with id: " + jewelry.getId() + " already exists");
+        }
         return repo.save(jewelry);
     }
 
@@ -43,12 +50,12 @@ public class JewelryService {
         repo.deleteById(id);
     }
 
-    public Iterable<Jewelry> getItemByOwnerPersonalNo(final String ownerPersonalNo) {
-        return repo.findByOwnerPersonalNo(ownerPersonalNo);
+    public Iterable<Jewelry> getItemByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
+        return repo.findByOwnerPersonalNo(ownerPersonalNo, pageable);
     }
 
-    public Iterable<Jewelry> getItemByStatus(final LoanStatus status) {
-        return repo.findByStatus(status);
+    public Iterable<Jewelry> getItemByStatus(final LoanStatus status, final Pageable pageable) {
+        return repo.findByStatus(status, pageable);
     }
 
 }

@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-import java.time.LocalDate;
-import java.time.Year;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class Automobile extends Item {
     private String model;
 
     @NotNull
-    @Digits(integer = 4,fraction = 0)
+    @Pattern(regexp="\\d{4}",message="only numbers! length must be 4")
     @Column(name = "manufacture_year", nullable = false)
     private int manufactureYear;
 
@@ -44,14 +45,4 @@ public class Automobile extends Item {
     @Enumerated(value = EnumType.STRING)
     private OdometerUnit odometerUnit;
 
-    @Override
-    public String toString() {
-        return "Automobile{" +
-                "manufacturer='" + manufacturer + '\'' +
-                ", model='" + model + '\'' +
-                ", manufactureYear=" + manufactureYear +
-                ", odometer=" + odometer +
-                ", odometerUnit=" + odometerUnit +
-                '}';
-    }
 }

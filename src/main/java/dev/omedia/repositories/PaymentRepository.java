@@ -1,10 +1,13 @@
 package dev.omedia.repositories;
 
 import dev.omedia.domains.Payment;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface PaymentRepository extends CrudRepository<Payment,Long> {
-    Iterable<Payment> findPaymentByItem_Id(long item_id);
+public interface PaymentRepository extends PagingAndSortingRepository<Payment,Long> {
+    List<Payment> findPaymentByItemId(long itemId, Pageable pageable);
 }

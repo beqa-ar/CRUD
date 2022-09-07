@@ -2,16 +2,14 @@ package dev.omedia.repositories;
 
 import dev.omedia.domains.Item;
 import dev.omedia.enums.LoanStatus;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface ItemRepository extends CrudRepository<Item,Long> {
-    Iterable<Item> findByOwnerPersonalNo(String ownerPersonalNo);
-    Iterable<Item> findByStatus(LoanStatus status);
+public interface ItemRepository extends PagingAndSortingRepository<Item,Long> {
+    List<Item> findByOwnerPersonalNo(String ownerPersonalNo, Pageable pageable);
+    List<Item> findByStatus(LoanStatus status, Pageable pageable);
 }
