@@ -6,6 +6,7 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.AutomobileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class AutomobileService {
         this.repo = repo;
     }
 
-    public Iterable<Automobile> getAutomobiles(Pageable pageable) {
+    public Page<Automobile> getAutomobiles(Pageable pageable) {
         return repo.findAll(pageable);
     }
 
@@ -49,12 +50,12 @@ public class AutomobileService {
         repo.deleteById(id);
     }
 
-    public Iterable<Automobile> getAutomobilesByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
+    public Page<Automobile> getAutomobilesByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
         return repo.findByOwnerPersonalNo(ownerPersonalNo, pageable);
     }
 
-    public Iterable<Automobile> getAutomobilesByStatus(final LoanStatus status, final Pageable pageable) {
-        return repo.findByStatus(status, pageable);
+    public Page<Automobile> getAutomobilesByLoanStatus(final LoanStatus status, final Pageable pageable) {
+        return repo.findByLoanStatus(status, pageable);
     }
 
 }

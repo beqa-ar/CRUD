@@ -7,6 +7,7 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.TechnicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class TechnicService {
         this.repo = repo;
     }
 
-    public Iterable<Technic> getTechnics(final Pageable pageable) {
+    public Page<Technic> getTechnics(final Pageable pageable) {
         return repo.findAll(pageable);
     }
 
@@ -49,12 +50,12 @@ public class TechnicService {
         repo.deleteById(id);
     }
 
-    public Iterable<Technic> getItemByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
+    public Page<Technic> getTechnicsByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
         return repo.findByOwnerPersonalNo(ownerPersonalNo, pageable);
     }
 
-    public Iterable<Technic> getItemByStatus(final LoanStatus status, final Pageable pageable) {
-        return repo.findByStatus(status, pageable);
+    public Page<Technic> getTechnicsByLoanStatus(final LoanStatus status, final Pageable pageable) {
+        return repo.findByLoanStatus(status, pageable);
     }
 
 }

@@ -38,6 +38,7 @@ public class Payment {
     private double AmountMoneyPaid;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "item_id")
     private Item item;
 }

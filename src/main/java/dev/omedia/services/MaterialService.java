@@ -6,6 +6,7 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.MaterialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class MaterialService {
         this.repo = repo;
     }
 
-    public Iterable<Material> getMaterials(final Pageable pageable) {
+    public Page<Material> getMaterials(final Pageable pageable) {
         return repo.findAll(pageable);
     }
 

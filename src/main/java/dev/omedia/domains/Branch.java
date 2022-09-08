@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -28,8 +29,7 @@ public class Branch {
     private String address;
 
     @NotNull
-    @Digits(integer = 9,fraction =0)
-    @Size(min = 9,max = 9)
+    @Pattern(regexp="\\d{9}",message="only numbers! length must be 9")
     @Column(name = "phone_number",nullable = false,length = 9)
     private String phoneNumber;
 }

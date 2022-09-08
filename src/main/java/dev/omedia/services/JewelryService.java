@@ -7,6 +7,7 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.JewelryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class JewelryService {
         this.repo = repo;
     }
 
-    public Iterable<Jewelry> getJewelries(final Pageable pageable) {
+    public Page<Jewelry> getJewelries(final Pageable pageable) {
         return repo.findAll(pageable);
     }
 
@@ -50,12 +51,12 @@ public class JewelryService {
         repo.deleteById(id);
     }
 
-    public Iterable<Jewelry> getItemByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
+    public Page<Jewelry> getJewelriesByOwnerPersonalNo(final String ownerPersonalNo, final Pageable pageable) {
         return repo.findByOwnerPersonalNo(ownerPersonalNo, pageable);
     }
 
-    public Iterable<Jewelry> getItemByStatus(final LoanStatus status, final Pageable pageable) {
-        return repo.findByStatus(status, pageable);
+    public Page<Jewelry> getJewelriesByLoanStatus(final LoanStatus status, final Pageable pageable) {
+        return repo.findByLoanStatus(status, pageable);
     }
 
 }

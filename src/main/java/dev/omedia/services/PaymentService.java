@@ -6,6 +6,7 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class PaymentService {
         this.repo = repo;
     }
 
-    public Iterable<Payment> getPayments(final Pageable pageable) {
+    public Page<Payment> getPayments(final Pageable pageable) {
         return repo.findAll(pageable);
     }
 
@@ -48,7 +49,7 @@ public class PaymentService {
         repo.deleteById(id);
     }
 
-    public Iterable<Payment> findPaymentByItemId(final long itemId, final Pageable pageable) {
+    public Page<Payment> findPaymentByItemId(final long itemId, final Pageable pageable) {
         return repo.findPaymentByItemId(itemId, pageable);
     }
 }

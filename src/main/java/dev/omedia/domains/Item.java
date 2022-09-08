@@ -48,15 +48,15 @@ public abstract class Item {
 
     @NotNull
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private LoanStatus status;
+    @Column(name = "loan_status", nullable = false)
+    private LoanStatus loanStatus;
 
     @NotNull
     @PastOrPresent
     @Column(name = "status_update_date", nullable = false)
     private LocalDate statusUpdateDate;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name ="branch_id")
     private Branch branch;
 
