@@ -6,6 +6,10 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.AutomobileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,15 +25,18 @@ public class AutomobileService {
         this.repo = repo;
     }
 
+
     public Page<Automobile> getAutomobiles(Pageable pageable) {
         return repo.findAll(pageable);
     }
 
+    @Cacheable(cacheNames = "automobiles",key = "#id")
     public Automobile getAutomobile(final long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Automobile.class.getName() + "with id: " + id + " not found"));
     }
 
+    @CachePut(cacheNames = "automobiles",key = "#automobile.id")
     public Automobile addAutomobile(final Automobile automobile) {
         if(repo.existsById(automobile.getId())){
             throw new EntityAlreadyExistsException(Automobile.class.getName() + "with id: " + automobile.getId() + " already exists");
@@ -37,6 +44,7 @@ public class AutomobileService {
         return repo.save(automobile);
     }
 
+    @CachePut(cacheNames = "automobiles",key = "#id")
     public Automobile updateAutomobile(final long id, final Automobile automobile) {
         if (repo.existsById(id)) {
             automobile.setId(id);
@@ -46,6 +54,7 @@ public class AutomobileService {
         }
     }
 
+    @CacheEvict(cacheNames = "automobiles",key = "#id")
     public void removeAutomobileById(final long id) {
         repo.deleteById(id);
     }

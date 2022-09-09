@@ -1,13 +1,10 @@
 package dev.omedia.domains;
 
-import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import dev.omedia.enums.OdometerUnit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;

@@ -1,12 +1,14 @@
 package dev.omedia.services;
 
-import dev.omedia.domains.Automobile;
 import dev.omedia.domains.Technic;
 import dev.omedia.enums.LoanStatus;
 import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.TechnicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,13 @@ public class TechnicService {
         return repo.findAll(pageable);
     }
 
+    @Cacheable(cacheNames = "technic",key = "#id")
     public Technic getTechnic(final long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Technic.class.getName() + "with id: " + id + " not found"));
     }
 
+    @CachePut(cacheNames = "technic",key = "#technic.id")
     public Technic addTechnic(final Technic technic) {
         if(repo.existsById(technic.getId())){
             throw new EntityAlreadyExistsException(Technic.class.getName() + "with id: " + technic.getId() + " already exists");
@@ -37,6 +41,7 @@ public class TechnicService {
         return repo.save(technic);
     }
 
+    @CachePut(cacheNames = "technic",key = "#id")
     public Technic updateTechnic(final long id, final Technic technic) {
         if (repo.existsById(id)) {
             technic.setId(id);
@@ -46,6 +51,7 @@ public class TechnicService {
         }
     }
 
+    @CacheEvict(cacheNames = "technic",key = "#id")
     public void removeTechnicById(final long id) {
         repo.deleteById(id);
     }

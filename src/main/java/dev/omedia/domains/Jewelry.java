@@ -22,7 +22,7 @@ public class Jewelry extends Item {
     @Column(name = "description",nullable = false,columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     private List<Material> materials;
 
 }

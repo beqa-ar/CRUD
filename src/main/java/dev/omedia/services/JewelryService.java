@@ -1,12 +1,14 @@
 package dev.omedia.services;
 
-import dev.omedia.domains.Automobile;
 import dev.omedia.domains.Jewelry;
 import dev.omedia.enums.LoanStatus;
 import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.JewelryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,13 @@ public class JewelryService {
         return repo.findAll(pageable);
     }
 
+    @Cacheable(cacheNames = "jewelry",key = "#id")
     public Jewelry getJewelry(final long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Jewelry.class.getName() + "with id: " + id + " not found"));
     }
 
+    @CachePut(cacheNames = "jewelry",key = "#jewelry.id")
     public Jewelry addJewelry(final Jewelry jewelry) {
 
         if(repo.existsById(jewelry.getId())){
@@ -38,6 +42,7 @@ public class JewelryService {
         return repo.save(jewelry);
     }
 
+    @CachePut(cacheNames = "jewelry",key = "#id")
     public Jewelry updateJewelry(final long id, final Jewelry jewelry) {
         if (repo.existsById(id)) {
             jewelry.setId(id);
@@ -47,6 +52,7 @@ public class JewelryService {
         }
     }
 
+    @CacheEvict(cacheNames = "jewelry",key = "#id")
     public void removeJewelryById(final long id) {
         repo.deleteById(id);
     }

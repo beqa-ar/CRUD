@@ -56,7 +56,7 @@ public abstract class Item {
     @Column(name = "status_update_date", nullable = false)
     private LocalDate statusUpdateDate;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinColumn(name ="branch_id")
     private Branch branch;
 

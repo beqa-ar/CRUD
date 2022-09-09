@@ -6,6 +6,9 @@ import dev.omedia.exceptions.EntityAlreadyExistsException;
 import dev.omedia.exceptions.EntityNotFoundException;
 import dev.omedia.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,11 +28,13 @@ public class ItemService {
         return repo.findAll(pageable);
     }
 
+    @Cacheable(cacheNames = "item",key = "#id")
     public Item getItem(final long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(Item.class.getName() + "with id: " + id + " not found"));
     }
 
+    @CachePut(cacheNames = "item",key = "#item.id")
     public Item addItem(final Item item) {
         if(repo.existsById(item.getId())){
             throw new EntityAlreadyExistsException(Item.class.getName() + "with id: " + item.getId() + " already exists");
@@ -37,6 +42,7 @@ public class ItemService {
         return repo.save(item);
     }
 
+    @CachePut(cacheNames = "item",key = "#id")
     public Item updateItem(final long id, final Item item) {
         if (repo.existsById(id)) {
             item.setId(id);
@@ -46,6 +52,7 @@ public class ItemService {
         }
     }
 
+    @CacheEvict(cacheNames = "item",key = "#id")
     public void removeItemById(final long id) {
         repo.deleteById(id);
     }
